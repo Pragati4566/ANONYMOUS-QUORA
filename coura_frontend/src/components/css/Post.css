@@ -1,0 +1,339 @@
+.post {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background-color: white;
+  background-size: cover;
+  border: 2px solid lightgray;
+  margin-top: 10px;
+
+  border-radius: 10px;
+  max-width: 900px;
+  box-shadow: 2px 2px 2px #0d8ecf;
+  width: 1500px;
+}
+
+.post__info {
+  display: flex;
+  align-items: center;
+}
+
+.post__info > h4 {
+  margin-left: 10px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.post__info > h4:hover {
+  text-decoration: underline;
+}
+
+.post__info > small {
+  margin-left: 10px;
+}
+
+.post__body {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.post__body > .post__question {
+  margin-top: 10px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  flex: 1;
+}
+
+.post__footer > .button_container > .post___btnAnswer {
+  margin-left: 10px;
+  margin-right: 10px;
+  cursor: pointer;
+  padding: 7px;
+  background-color: green;
+  outline: none;
+  border: none;
+  color: white;
+  font-weight: 300;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+.post__footer > .button_container > .post__btnAnswer {
+  margin-left: 10px;
+  margin-right: 10px;
+  cursor: pointer;
+  padding: 7px;
+  background-color: #333333;
+  outline: none;
+  border: none;
+  color: white;
+  font-weight: 300;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+.post__footer > .button_container > .post___btnAnswer:hover {
+  color: white;
+  background: goldenrod;
+}
+
+.post__footer > .button_container > .post__btnAnswer:hover {
+  color: white;
+  background: goldenrod;
+}
+
+.post__footer > .button_container > .post__btnAnswer:disabled {
+  font-weight: bold;
+  color: white;
+  background: grey;
+}
+
+.post__footer > .button_container > .post___btnAnswer:disabled {
+  font-weight: bold;
+  color: white;
+  background: grey;
+}
+
+.ansbtns {
+  margin-top: 10px;
+}
+
+.ansbtns > .post__btnAnswer {
+  cursor: pointer;
+  padding: 7px;
+  background-color: #333333;
+  outline: none;
+  border: none;
+  color: white;
+  font-weight: 300;
+  font-size: 10px;
+  border-radius: 5px;
+}
+
+.ansbtns > .post__btnAnswer:hover {
+  color: white;
+  background: goldenrod;
+}
+.ansbtns > .post__btnAnswer:disabled {
+  font-weight: bold;
+  color: white;
+  background: grey;
+}
+
+.post__body > .post__answer > p {
+  margin-bottom: 10px;
+  padding: 5px;
+}
+
+
+.post__body > img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  background-color: transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.post__footer {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+  justify-content: space-between;
+}
+
+.post__footer > .MuiSvgIcon-root {
+  color: #333333;
+  margin-right: 40px;
+  cursor: pointer;
+  font-size: 30px;
+}
+
+.post__footerAction {
+  background-color: #9bd8f7;
+  border-color: 2px solid #333333;
+  margin-right: 8px;
+  padding: 5px;
+  align-items: center;
+  display: flex;
+  justify-content: space-around;
+  border-radius: 50px;
+}
+
+.post__footerAction > .MuiSvgIcon-root {
+  color: #333333;
+  margin-right: 10px;
+  cursor: pointer;
+  font-size: 32px;
+  margin-left: 10px;
+}
+
+.post__footerAction > .MuiSvgIcon-root:hover {
+  color: #333333;
+  margin-right: 10px;
+}
+
+.post__footerLeft {
+  margin-left: auto;
+}
+
+.post__footerLeft > .MuiSvgIcon-root {
+  color: rgb(1, 26, 80);
+  cursor: pointer;
+  margin-left: 30px;
+  font-size: 30px;
+}
+
+.modal__question {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.modal__question > h1 {
+  color: #333333;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.modal__question > p {
+  color: gray;
+  font-size: small;
+}
+
+.modal__question > p > .name {
+  color: #333333;
+  font-weight: bold;
+}
+
+.modal__answer {
+  display: flex;
+  padding-top: 20px;
+  flex: 1;
+}
+
+.modal__answer > textarea {
+  width: 100%;
+  height: 200px;
+  padding: 5px;
+  font-size: 15px;
+  color: #333333;
+}
+
+.modal__buttons {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 50px;
+  width: 100%;
+}
+
+.modal__buttons > .cancle {
+  border: none;
+  margin-top: 10px;
+  outline: none;
+  color: white;
+  font-weight: 700;
+  padding: 10px;
+  border-radius: 30px;
+  background-color: #333333;
+  cursor: pointer;
+}
+
+.modal__buttons > .cancle:hover {
+  color: white;
+  background-color: #1da1f2;
+}
+.modal__buttons > .add {
+  border: none;
+  outline: none;
+  margin-top: 5px;
+  background-color: #333333;
+  color: white;
+  font-weight: 700;
+  padding: 10px;
+  border-radius: 30px;
+  cursor: pointer;
+  width: 50%;
+}
+.modal__buttons > .add:hover {
+  background-color: #1da1f2;
+  color: white;
+}
+
+.commentInput > .addComment {
+  background-color: #333333;
+  color: white;
+  font-weight: 700;
+  padding: 10px;
+  border-radius: 30px;
+  cursor: pointer;
+  margin: 9px;
+  width: max-content;
+}
+.commentInput > .addComment:hover {
+  background-color: #1da1f2;
+  color: white;
+}
+
+.react-responsive-modal-modal {
+  /* width: 600px; */
+  height: 400px;
+}
+
+.quill {
+  width: 100%;
+  height: 120px;
+}
+.iconHover:hover {
+  color: #333333;
+}
+
+.avatar {
+  position: relative;
+  z-index: 0;
+}
+
+
+.ansbtns {
+  display: inline-block;
+  justify-content: flex-end;
+  margin-left: 154px;
+  padding-right: 13px;
+}
+.ansbtns button {
+  margin-left: 13px;
+}
+
+.likebtn {
+  margin-bottom: -30px;
+}
+
+.commentInputBox:focus {
+  outline: none;
+}
+
+.commentInputBox {
+  font-size: 20px;
+  padding: 10px;
+  border-radius: 30px;
+  border: 1px solid gray;
+  width: 80%;
+  margin: 6px;
+}
+
+.commentInput {
+  display: flex;
+  flex-direction: row;
+}
+.post___footerAction {
+  display: flex;
+  flex-direction: row;
+}

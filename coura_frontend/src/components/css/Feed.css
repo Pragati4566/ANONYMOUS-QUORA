@@ -1,0 +1,27 @@
+.center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.feed {
+  display: flex;
+  flex-direction: column;
+  flex: 0.6;
+}
+
+.blog {
+  display: flex;
+  flex-direction: column;
+  flex: 0.6;
+}
+
+body {
+  background-color: white;
+}
+
+.avatar {
+  position: relative;
+  z-index: 0;
+}

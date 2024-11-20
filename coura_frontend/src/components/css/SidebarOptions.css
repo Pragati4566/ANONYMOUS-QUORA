@@ -1,0 +1,37 @@
+.sidebarOption {
+  display: flex;
+  flex-direction: column;
+}
+
+.optionText:hover {
+  text-decoration: underline;
+}
+
+.categoryIcon {
+  width: 50px;
+  height: auto;
+  border: 1px solid #333333;
+  border-radius: 2px;
+  margin: 5px 10px 5px 0;
+  width: 40px;
+  height: 40px;
+}
+
+.category {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 8px;
+}
+
+.optionText {
+  color: gray;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.active {
+  color: #0d8ecf;
+  font-weight: bold;
+}
