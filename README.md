@@ -14,7 +14,7 @@ Clone the git repository from the following link: https://github.com/College-Quo
 
 Also add an .env file in the root folder which will contain : <br/>
 PORT = 80  <br/> 
-EMAIL_HOST = smtp.gmail.com <br/>
+EMAIL_HOST = pragati845822.gmail.com <br/>
 EMAIL_SERVICE = Gmail <br/>
 EMAIL_PORT = 465 <br/>
 EMAIL_SECURE = true <br/>
