@@ -44,7 +44,7 @@ router.put("/:id", async (req, res) => {
       .updateOne(
         { _id: blogId },
         {
-          $set: {
+          $set: {                      //updating file
             blogName: req.body.blogName,
             blogUrl: req.body.blogUrl,
             category: req.body.category,
