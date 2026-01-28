@@ -11,3 +11,4 @@ const reportWebVitals = (onPerfEntry) => {
 };
 
 export default reportWebVitals;
+//this measures the performance of the website that how fast is the website
