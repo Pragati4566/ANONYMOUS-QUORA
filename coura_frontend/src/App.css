@@ -8,8 +8,9 @@ body {
 }
 
 * {
-  box-sizing: border-box;
-  scroll-behavior: smooth;
+  box-sizing: border-box;/*  padding and border in w ,not jump , to remove default shadow ,
+  css global variables ,forcing,to remove blue colour from the buton when clicked*/
+  scroll-behavior: smooth; 
 }
 
 .btn:hover {
@@ -33,6 +34,6 @@ button:focus {
 }
 
 :root {
-  --vp: 0.052vw;
+  --vp: 0.052vw; 
   --vm: 0.278vw;
 }
