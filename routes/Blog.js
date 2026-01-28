@@ -279,3 +279,4 @@ router.post("/downvotes", async (req, res) => {
 });
 
 module.exports = router;
+//database in mongodb atlas while the images and videos in the aws s3(full blog not just images and videos)
