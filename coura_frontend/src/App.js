@@ -14,7 +14,7 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/*" exact element={<Quora />} />
-// when register component when sign up page and the user is not loged in
+// when register component when sign up page and the user is not loged in // and no props if props then element={<register name=
         {!token && <Route path="/signup" exact element={<Register />} />}   
         {!token && <Route path="/login" exact element={<Login />} />}
         {!token && (
