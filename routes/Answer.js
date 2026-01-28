@@ -5,35 +5,37 @@ const answerDB = require("../models/Answer");
 const userDB = require("../models/User");
 const questionDB = require("../models/Question");
 
-router.post("/", async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
+    const ansId = req.params.id;   // URL se answer ID le rahe hain
+
     await answerDB
-      .create({
-        answer: req.body.answer,
-        questionId: req.body.questionId,
-        createdAt: Date.now(),
-        ansUserId: req.body.userId,
-      })
-      .then(async () => {
-        await questionDB.updateOne(
-          { _id: req.body.questionId },
-          { $push: { answeredByUsers: req.body.userId } }
-        );
-        res.status(201).send({
+      .updateOne(
+        { _id: ansId },                 // jiska answer update karna hai
+        { $set: { answer: req.body.answer } } // new answer text
+      )
+
+      // agar update successful
+      .then(() => {
+        res.status(200).send({
           status: true,
-          message: "Answer added successfully!",
+          message: "Answer updated successfully!",
         });
       })
-      .catch((err) => {
+
+      // agar update fail ho gaya
+      .catch(() => {
         res.status(400).send({
           status: false,
           message: "Bad request!",
         });
       });
+
   } catch (err) {
+    // server error
     res.status(500).send({
       status: false,
-      message: "Error while adding answer!",
+      message: "Unexpected error!",
     });
   }
 });
