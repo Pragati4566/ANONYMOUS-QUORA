@@ -5,26 +5,35 @@ const answerDB = require("../models/Answer");
 const userDB = require("../models/User");
 const questionDB = require("../models/Question");
 
-router.put("/:id", async (req, res) => {
+// POST request to add a new answer
+router.post("/", async (req, res) => {
   try {
-    const ansId = req.params.id;   // URL se answer ID le rahe hain
-
+    // MongoDB me answer create kar rahe hain
     await answerDB
-      .updateOne(
-        { _id: ansId },                 // jiska answer update karna hai
-        { $set: { answer: req.body.answer } } // new answer text
-      )
+      .create({
+        answer: req.body.answer,           // frontend se aaya answer text
+        questionId: req.body.questionId,   // kis question ka answer hai
+        createdAt: Date.now(),             // answer ka time
+        ansUserId: req.body.userId,        // kis user ne answer diya
+      })
 
-      // agar update successful
-      .then(() => {
-        res.status(200).send({
+      // agar answer successfully add ho gaya
+      .then(async () => {
+        // Question collection me userId push kar rahe hain (jo answer diya)
+        await questionDB.updateOne(
+          { _id: req.body.questionId },  // question ka ID find karo
+          { $push: { answeredByUsers: req.body.userId } } // user ko list me add karo
+        );
+
+        // success response bhejo frontend ko
+        res.status(201).send({
           status: true,
-          message: "Answer updated successfully!",
+          message: "Answer added successfully!",
         });
       })
 
-      // agar update fail ho gaya
-      .catch(() => {
+      // agar answer add nahi hua (bad data)
+      .catch((err) => {
         res.status(400).send({
           status: false,
           message: "Bad request!",
@@ -32,13 +41,14 @@ router.put("/:id", async (req, res) => {
       });
 
   } catch (err) {
-    // server error
+    // agar server crash ya unexpected error aaye
     res.status(500).send({
       status: false,
-      message: "Unexpected error!",
+      message: "Error while adding answer!",
     });
   }
 });
+
 
 router.put("/:id", async (req, res) => {
   try {
