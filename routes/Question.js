@@ -195,25 +195,26 @@ router.post("/upvotes", async (req, res) => {
   try {
     const user = await userDB.findById(userId).exec();
     const ques = await questionDB.findById(postId).exec();
-    const choice = user.votes.get(postId);
+    const choice = user.votes.get(postId);  //1 -1 0  //actual voting 
     var message = "";
 
-    if (choice === undefined || choice === 0) {
-      ques.quesUpvotes += 1;
-      user.votes.set(postId, 1);
+        if (choice === undefined || choice === 0) {
+      ques.quesUpvotes += 1;       // increase upvote count
+      user.votes.set(postId, 1);   // mark user voted up
       message = "Question Upvoted";
-    } else if (choice == -1) {
+    }
+     else if (choice == -1) {
       ques.quesDownvotes -= 1;
       ques.quesUpvotes += 1;
       user.votes.set(postId, 1);
       message = "Question Upvoted";
-    } else if (choice == 1) {
+    } else if (choice == 1) {    //TOGGLING OF VOTE 
       ques.quesUpvotes -= 1;
       user.votes.set(postId, 0);
       message = "vote removed";
     }
 
-    await user.save();
+    await user.save(); //save user votes and question votes
     await ques.save();
 
     res.status(200).send({
@@ -221,7 +222,7 @@ router.post("/upvotes", async (req, res) => {
       message: message,
       upvotes: ques.quesUpvotes,
       downvotes: ques.quesDownvotes,
-      choice: user.votes.get(postId),
+      choice: user.votes.get(postId), 
     });
   } catch (err) {
     res.status(500).send({
