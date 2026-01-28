@@ -4,8 +4,8 @@ dotenv.config();
 
 module.exports = async (email, subject, text) => {
   try {
-    const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
+    const transporter = nodemailer.createTransport({ //configuration of the email server
+      host: process.env.EMAIL_HOST, 
       service: process.env.EMAIL_SERVICE,
       port: process.env.EMAIL_PORT,
       secure: process.env.EMAIL_SECURE,
@@ -28,3 +28,4 @@ module.exports = async (email, subject, text) => {
     return error;
   }
 };
+//smtp gmail smtp port secure true or not //sender email //reciever mail as email
