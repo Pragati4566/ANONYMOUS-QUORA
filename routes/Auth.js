@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require("express"); //jwt in form of json response 
 const router = express.Router();
 const dotenv = require("dotenv");
 dotenv.config();
@@ -139,7 +139,7 @@ router.post("/userData", async (req, res) => {
       });
     }
 
-    const userEmail = user.email;
+    const userEmail = user.email;  //jwt token contains email
     userDB
       .findOne({ email: userEmail })
       .then((data) => {
@@ -306,3 +306,4 @@ router.post("/:id/reset-password/:token", async (req, res) => {
 });
 
 module.exports = router;
+//dotenv is used for loading the env variables into the app
