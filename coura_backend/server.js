@@ -24,7 +24,6 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE,PATCH");//server will accept these methods only
   next();
 });
-app.use("/api/report", require("./routes/report.routes"));
 
 app.use(cors());
 
