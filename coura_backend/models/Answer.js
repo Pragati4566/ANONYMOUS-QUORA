@@ -9,7 +9,7 @@ const AnswerSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now(), 
   },
   ansUserId: { type: mongoose.Schema.Types.ObjectId, required: true },
 });
