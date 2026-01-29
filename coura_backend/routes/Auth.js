@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const userDB = require("../models/User");
+const userDB = require("../models/report");
 const tokenDB = require("../models/Token");
 const sendEmail = require("../utils/SendEmail");
 const crypto = require("crypto");
