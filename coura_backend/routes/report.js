@@ -6,7 +6,6 @@ const Answer = require("../models/answer.model");
 const Question = require("../models/question.model");
 const Blog = require("../models/blog.model");
 const Comment = require("../models/comment.model");
-const auth = require("../middlewares/auth");
 
 // REPORT THRESHOLD
 const REPORT_THRESHOLD = 5;
@@ -63,10 +62,9 @@ router.post("/", auth, async (req, res) => {
  */
 router.get("/admin", auth, async (req, res) => {
   try {
-    // OPTIONAL: check admin role
-    if (!req.user.isAdmin) {
-      return res.status(403).json({ message: "Access denied" });
-    }
+   if (req.user.role !== "admin") {
+  return res.status(403).json({ message: "Access denied" });
+}
 
     const reports = await Report.find({ status: "blocked" })
       .sort({ reportCount: -1 });
@@ -82,10 +80,9 @@ router.get("/admin", auth, async (req, res) => {
  */
 router.delete("/admin/:reportId", auth, async (req, res) => {
   try {
-    if (!req.user.isAdmin) {
-      return res.status(403).json({ message: "Access denied" });
-    }
-
+  if (req.user.role !== "admin") {
+  return res.status(403).json({ message: "Access denied" });
+}
     const report = await Report.findById(req.params.reportId);
     if (!report) {
       return res.status(404).json({ message: "Report not found" });
