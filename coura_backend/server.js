@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*"); //any frontend can call this server
   req.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization");//this info is accepted from the frontend
-  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE,PATCH");//server will accept these methods only
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");//server will accept these methods only
   next();
 });
 
