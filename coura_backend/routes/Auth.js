@@ -30,12 +30,25 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    if (req.body.email.endsWith(".com")) {
-      return res.status(400).send({
-        status: false,
-        message: "Please enter your institute email address!",
-      });
-    }
+const email = req.body.email;
+
+const allowedDomains = [
+  /\.edu$/,
+  /\.ac\.in$/,
+  /\.edu\.in$/,
+  /\.ac\.uk$/,
+];
+
+const isInstitutionalEmail = allowedDomains.some((pattern) =>
+  pattern.test(email)
+);
+
+if (!isInstitutionalEmail) {
+  return res.status(400).json({
+    status: false,
+    message: "Please enter a valid institute or university email address",
+  });
+}
 
     const encryptedPassword = await bcrypt.hash(req.body.password, 10);
 
