@@ -51,7 +51,9 @@ if (!isInstitutionalEmail) {
 }
 
     const encryptedPassword = await bcrypt.hash(req.body.password, 10);
-
+    if (req.body.email === process.env.ADMIN_EMAIL) {
+  role = "admin";
+}
     user = await userDB.create({
       name: req.body.name,
       email: req.body.email,
