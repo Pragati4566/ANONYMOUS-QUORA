@@ -51,6 +51,7 @@ if (!isInstitutionalEmail) {
 }
 
     const encryptedPassword = await bcrypt.hash(req.body.password, 10);
+    role='user';
     if (req.body.email === process.env.ADMIN_EMAIL) {
   role = "admin";
 }
@@ -59,6 +60,7 @@ if (!isInstitutionalEmail) {
       email: req.body.email,
       collegeName: req.body.collegeName,
       password: encryptedPassword,
+      role:role,
       votes: {},
     });
 
