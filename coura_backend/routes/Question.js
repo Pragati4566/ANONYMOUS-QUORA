@@ -279,24 +279,31 @@ router.post("/downvotes", async (req, res) => {
   }
 });
 
-router.post("/votes", async (req, res) => {
-  const userId = req.body.userId;
-
+router.get("/votes", authMiddleware, async (req, res) => {
   try {
-    const user = await userDB.findById(userId).exec();
-    var votes = user.votes;
+    const userId = req.user.id; // from JWT
 
-    res.status(200).send({
+    const user = await userDB.findById(userId).select("votes");
+
+    if (!user) {
+      return res.status(404).json({
+        status: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
       status: true,
-      message: "Returning user votes",
-      votes: votes,
+      votes: user.votes,
     });
+
   } catch (err) {
-    res.status(500).send({
+    res.status(500).json({
       status: false,
-      message: "Error while fetching votes of user",
+      message: "Error while fetching votes",
     });
   }
 });
+
 
 module.exports = router;
