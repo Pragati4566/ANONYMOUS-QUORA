@@ -2,7 +2,7 @@
 
 Coura ia an anonymous Quora tailored to college student which enables users to ask questions, post blogs about any specific topics while also receiving anonymous and genuine responses from verified members. The platform enable users to register only through their college or institute email id and also send an email to verify the user. The home page consists of feed which contains the questions and answers, the blog feed is present on the navbar and redirects to the blog page. The technical stack used for this application is MERN along with concepts like DBMS, OOPS , Design and Architecture. We see this website being used by the majority of college students in the future to get answers anonymously without having the fear to write truth on a public platform about the college, teachers etc.
 
-Website: [https://coura-8zlld8b8j-coura-team.vercel.app/](https://anonymous-quora-1.onrender.com/)
+Website: [https://coura-8zlld8b8j-coura-team.render.app/](https://anonymous-quora-1.onrender.com/)
 
 ## Prerequisites
 One must have nodeJs installed on the system. You can follow this tutorial to set up NodeJs on your system: https://radixweb.com/blog/installing-npm-and-nodejs-on-windows-and-mac
