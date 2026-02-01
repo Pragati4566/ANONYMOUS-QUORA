@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-
 const commentDB = require("../models/Comment");
 
 router.post("/", async (req, res) => {
@@ -56,5 +55,4 @@ router.delete("/:id", async (req, res) => {
     });
   }
 });
-
 module.exports = router;
