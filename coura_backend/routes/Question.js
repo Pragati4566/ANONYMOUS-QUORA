@@ -8,28 +8,29 @@ const userDB = require("../models/User");
 
 router.post("/", async (req, res) => {
   try {
-    await questionDB
-      .create({
-        questionName: req.body.questionName,
-        questionUrl: req.body.questionUrl,
-        createdAt: Date.now(),
-        category: req.body.category,
-        quesUserId: req.body.userId,
-        quesUpvotes: 0,
-        quesDownvotes: 0,
-      })
-      .then(() => {
-        res.status(201).send({
-          status: true,
-          message: "Question added successfully!",
-        });
-      })
-      .catch((err) => {
-        res.status(400).send({
-          status: false,
-          message: "Bad request!",
-        });
+    // 🔒 QUESTION LENGTH LIMIT
+    if (!req.body.questionName || req.body.questionName.length > 300) {
+      return res.status(400).json({
+        status: false,
+        message: "Question too long. Max 300 characters allowed.",
       });
+    }
+
+    await questionDB.create({
+      questionName: req.body.questionName,
+      questionUrl: req.body.questionUrl,
+      createdAt: Date.now(),
+      category: req.body.category,
+      quesUserId: req.body.userId,
+      quesUpvotes: 0,
+      quesDownvotes: 0,
+    });
+
+    res.status(201).send({
+      status: true,
+      message: "Question added successfully!",
+    });
+
   } catch (err) {
     res.status(500).send({
       status: false,
@@ -38,39 +39,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
-  try {
-    const quesId = req.params.id;
-    await questionDB
-      .updateOne(
-        { _id: quesId },
-        {
-          $set: {
-            questionName: req.body.questionName,
-            questionUrl: req.body.questionUrl,
-            category: req.body.category,
-          },
-        }
-      )
-      .then(() => {
-        res.status(200).send({
-          status: true,
-          message: "Question updated successfully!",
-        });
-      })
-      .catch((err) => {
-        res.status(400).send({
-          status: false,
-          message: "Bad request!",
-        });
-      });
-  } catch (err) {
-    res.status(500).send({
-      status: false,
-      message: "Unexpected error!",
-    });
-  }
-});
 
 router.delete("/:id", async (req, res) => {
   try {
