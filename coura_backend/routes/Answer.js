@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
 
 const answerDB = require("../models/Answer");
 const userDB = require("../models/User");
@@ -7,29 +8,31 @@ const questionDB = require("../models/Question");
 
 router.post("/", async (req, res) => {
   try {
-    await answerDB
-      .create({
-        answer: req.body.answer,
-        questionId: req.body.questionId,
-        createdAt: Date.now(),
-        ansUserId: req.body.userId,
-      })
-      .then(async () => {
-        await questionDB.updateOne(
-          { _id: req.body.questionId },
-          { $push: { answeredByUsers: req.body.userId } }
-        );
-        res.status(201).send({
-          status: true,
-          message: "Answer added successfully!",
-        });
-      })
-      .catch((err) => {
-        res.status(400).send({
-          status: false,
-          message: "Bad request!",
-        });
+    //  ANSWER LENGTH LIMIT
+    if (!req.body.answer || req.body.answer.length > 2000) {
+      return res.status(400).json({
+        status: false,
+        message: "Answer too long. Max 2000 characters allowed.",
       });
+    }
+
+    await answerDB.create({
+      answer: req.body.answer,
+      questionId: req.body.questionId,
+      createdAt: Date.now(),
+      ansUserId: req.body.userId,
+    });
+
+    await questionDB.updateOne(
+      { _id: req.body.questionId },
+      { $push: { answeredByUsers: req.body.userId } }
+    );
+
+    res.status(201).send({
+      status: true,
+      message: "Answer added successfully!",
+    });
+
   } catch (err) {
     res.status(500).send({
       status: false,
@@ -40,21 +43,26 @@ router.post("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   try {
-    const ansId = req.params.id;
-    await answerDB
-      .updateOne({ _id: ansId }, { $set: { answer: req.body.answer } })
-      .then(() => {
-        res.status(200).send({
-          status: true,
-          message: "Answer updated successfully!",
-        });
-      })
-      .catch(() => {
-        res.status(400).send({
-          status: false,
-          message: "Bad request!",
-        });
+    //  UPDATE ANSWER LIMIT ALSO
+    if (!req.body.answer || req.body.answer.length > 2000) {
+      return res.status(400).json({
+        status: false,
+        message: "Answer too long. Max 2000 characters allowed.",
       });
+    }
+
+    const ansId = req.params.id;
+
+    await answerDB.updateOne(
+      { _id: ansId },
+      { $set: { answer: req.body.answer } }
+    );
+
+    res.status(200).send({
+      status: true,
+      message: "Answer updated successfully!",
+    });
+
   } catch (err) {
     res.status(500).send({
       status: false,
@@ -69,25 +77,18 @@ router.delete("/:id/:quesId/:userId", async (req, res) => {
     const quesId = req.params.quesId;
     const userId = req.params.userId;
 
-    await answerDB
-      .deleteOne({ _id: ansId })
-      .then(async () => {
-        await questionDB.updateOne(
-          { _id: quesId },
-          { $pull: { answeredByUsers: userId } }
-        );
+    await answerDB.deleteOne({ _id: ansId });
 
-        res.status(200).send({
-          status: true,
-          message: "Answer deleted successfully!",
-        });
-      })
-      .catch(() => {
-        res.status(400).send({
-          status: false,
-          message: "Bad request!",
-        });
-      });
+    await questionDB.updateOne(
+      { _id: quesId },
+      { $pull: { answeredByUsers: userId } }
+    );
+
+    res.status(200).send({
+      status: true,
+      message: "Answer deleted successfully!",
+    });
+
   } catch (err) {
     res.status(500).send({
       status: false,
@@ -107,16 +108,11 @@ router.get("/:id", async (req, res) => {
     const userObjectId = new mongoose.Types.ObjectId(userId);
 
     const totalRecords = await questionDB.countDocuments({
-      answeredByUsers: userObjectId
+      answeredByUsers: userObjectId,
     });
 
     const data = await questionDB.aggregate([
-      {
-        $match: {
-          answeredByUsers: userObjectId   // 
-          filter in DB
-        }
-      },
+      { $match: { answeredByUsers: userObjectId } },
       {
         $lookup: {
           from: "answers",
@@ -125,9 +121,9 @@ router.get("/:id", async (req, res) => {
           as: "allAnswers",
         },
       },
-      { $sort: { createdAt: -1 } },       //  latest first
-      { $skip: skip },                    // pagination
-      { $limit: limit }
+      { $sort: { createdAt: -1 } },
+      { $skip: skip },
+      { $limit: limit },
     ]);
 
     res.status(200).send({
@@ -146,7 +142,5 @@ router.get("/:id", async (req, res) => {
     });
   }
 });
-
-
 
 module.exports = router;
