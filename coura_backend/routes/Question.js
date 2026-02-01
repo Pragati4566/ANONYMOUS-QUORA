@@ -328,7 +328,8 @@ router.get("/votes", authMiddleware, async (req, res) => {
     });
 
   } catch (err) {
-    res.status(500).json({
+    res.status(500).json({ //sending data to the frontend
+      
       status: false,
       message: "Error while fetching votes",
     });
