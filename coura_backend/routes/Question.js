@@ -5,10 +5,8 @@ const router = express.Router();
 const questionDB = require("../models/Question");
 const answerDB = require("../models/Answer");
 const userDB = require("../models/User");
-
 router.post("/", async (req, res) => {
   try {
-    // 🔒 QUESTION LENGTH LIMIT
     if (!req.body.questionName || req.body.questionName.length > 300) {
       return res.status(400).json({
         status: false,
@@ -16,6 +14,24 @@ router.post("/", async (req, res) => {
       });
     }
 
+    // 🔍 CHECK SIMILAR QUESTIONS
+    const similarQuestions = await questionDB.find(
+      { $text: { $search: req.body.questionName } },
+      { score: { $meta: "textScore" } }
+    )
+    .sort({ score: { $meta: "textScore" } })
+    .limit(5);
+
+    // if similar found → suggest instead of creating
+    if (similarQuestions.length > 0) {
+      return res.status(200).json({
+        status: false,
+        message: "Similar questions already exist",
+        suggestions: similarQuestions,
+      });
+    }
+
+    // CREATE QUESTION
     await questionDB.create({
       questionName: req.body.questionName,
       questionUrl: req.body.questionUrl,
