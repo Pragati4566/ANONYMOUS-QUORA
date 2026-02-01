@@ -62,18 +62,37 @@ router.post("/", auth, async (req, res) => {
  */
 router.get("/admin", auth, async (req, res) => {
   try {
-   if (req.user.role !== "admin") {
-  return res.status(403).json({ message: "Access denied" });
-}
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ message: "Access denied" });
+    }
 
+    //  pagination params
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    //  total blocked reports count
+    const totalReports = await Report.countDocuments({ status: "blocked" });
+
+    // paginated + sorted query
     const reports = await Report.find({ status: "blocked" })
-      .sort({ reportCount: -1 });
+      .sort({ reportCount: -1 })   // most reported first
+      .skip(skip)
+      .limit(limit);
 
-    res.json(reports);
+    res.status(200).json({
+      status: true,
+      currentPage: page,
+      totalPages: Math.ceil(totalReports / limit),
+      totalReports,
+      data: reports,
+    });
+
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 /**
  * ADMIN: DELETE CONTENT & RESOLVE REPORT
