@@ -109,6 +109,12 @@ router.delete("/:id", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const totalQuestions = await questionDB.countDocuments();
+
     await questionDB
       .aggregate([
         {
@@ -119,12 +125,20 @@ router.get("/", async (req, res) => {
             as: "allAnswers",
           },
         },
+        { $sort: { createdAt: -1 } }, // latest first
+        { $skip: skip },
+        { $limit: limit },
       ])
-      .exec()
       .then((data) => {
-        res.status(200).send(data);
+        res.status(200).send({
+          status: true,
+          currentPage: page,
+          totalPages: Math.ceil(totalQuestions / limit),
+          totalQuestions,
+          data,
+        });
       })
-      .catch((err) => {
+      .catch(() => {
         res.status(400).send({
           status: false,
           message: "Unable to get the question details!",
@@ -141,9 +155,19 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const userId = req.params.id;
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+    const skip = (page - 1) * limit;
+
     await userDB
       .findOne({ _id: userId })
       .then(async () => {
+
+        const totalQuestions = await questionDB.countDocuments({
+          quesUserId: userId,
+        });
+
         questionDB
           .aggregate([
             {
@@ -159,12 +183,18 @@ router.get("/:id", async (req, res) => {
                 as: "allAnswers",
               },
             },
+            { $sort: { createdAt: -1 } },
+            { $skip: skip },
+            { $limit: limit },
           ])
           .then((data) => {
             res.status(200).send({
               status: true,
               message: "Questions fetched successfully!",
-              data: data,
+              currentPage: page,
+              totalPages: Math.ceil(totalQuestions / limit),
+              totalQuestions,
+              data,
             });
           })
           .catch(() => {
