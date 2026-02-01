@@ -335,6 +335,48 @@ router.get("/votes", authMiddleware, async (req, res) => {
     });
   }
 });
+router.get("/trending", async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const totalQuestions = await questionDB.countDocuments();
+
+    const trendingQuestions = await questionDB.aggregate([
+      {
+        $addFields: {
+          score: { $subtract: ["$quesUpvotes", "$quesDownvotes"] },
+        },
+      },
+      {
+        $lookup: {
+          from: "answers",
+          localField: "_id",
+          foreignField: "questionId",
+          as: "allAnswers",
+        },
+      },
+      { $sort: { score: -1, createdAt: -1 } }, // trending + latest
+      { $skip: skip },
+      { $limit: limit },
+    ]);
+
+    res.status(200).send({
+      status: true,
+      currentPage: page,
+      totalPages: Math.ceil(totalQuestions / limit),
+      totalQuestions,
+      data: trendingQuestions,
+    });
+
+  } catch (err) {
+    res.status(500).send({
+      status: false,
+      message: "Error while fetching trending questions",
+    });
+  }
+});
 
 
 module.exports = router;
