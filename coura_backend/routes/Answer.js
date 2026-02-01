@@ -99,6 +99,12 @@ router.delete("/:id/:quesId/:userId", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const userId = req.params.id;
+
+    //pagination params
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+    const skip = (page - 1) * limit;
+
     await userDB
       .findOne({ _id: userId })
       .then(async () => {
@@ -114,22 +120,33 @@ router.get("/:id", async (req, res) => {
             },
           ])
           .then((data) => {
-            var newData = [];
+            let newData = [];
+
             for (let i = 0; i < data.length; i++) {
               let obj = data[i];
               let flag = false;
+
               for (let j = 0; j < obj.answeredByUsers.length; j++) {
                 if (obj.answeredByUsers[j] == userId) {
                   flag = true;
                   break;
                 }
               }
+
               if (flag) newData.push(obj);
             }
+
+            //pagination applied here
+            const totalRecords = newData.length;
+            const paginatedData = newData.slice(skip, skip + limit); //startidx,endidx(exclusive)
+
             res.status(200).send({
               status: true,
               message: "Answers fetched successfully!",
-              data: newData,
+              currentPage: page,
+              totalPages: Math.ceil(totalRecords / limit), //total pages which user will see
+              totalRecords,
+              data: paginatedData,
             });
           })
           .catch(() => {
@@ -152,5 +169,6 @@ router.get("/:id", async (req, res) => {
     });
   }
 });
+
 
 module.exports = router;
