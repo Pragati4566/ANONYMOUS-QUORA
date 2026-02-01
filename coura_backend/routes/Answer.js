@@ -100,68 +100,45 @@ router.get("/:id", async (req, res) => {
   try {
     const userId = req.params.id;
 
-    //pagination params
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 5;
     const skip = (page - 1) * limit;
 
-    await userDB
-      .findOne({ _id: userId })
-      .then(async () => {
-        questionDB
-          .aggregate([
-            {
-              $lookup: {
-                from: "answers",
-                localField: "_id",
-                foreignField: "questionId",
-                as: "allAnswers",
-              },
-            },
-          ])
-          .then((data) => {
-            let newData = [];
+    const userObjectId = new mongoose.Types.ObjectId(userId);
 
-            for (let i = 0; i < data.length; i++) {
-              let obj = data[i];
-              let flag = false;
+    const totalRecords = await questionDB.countDocuments({
+      answeredByUsers: userObjectId
+    });
 
-              for (let j = 0; j < obj.answeredByUsers.length; j++) {
-                if (obj.answeredByUsers[j] == userId) {
-                  flag = true;
-                  break;
-                }
-              }
+    const data = await questionDB.aggregate([
+      {
+        $match: {
+          answeredByUsers: userObjectId   // 
+          filter in DB
+        }
+      },
+      {
+        $lookup: {
+          from: "answers",
+          localField: "_id",
+          foreignField: "questionId",
+          as: "allAnswers",
+        },
+      },
+      { $sort: { createdAt: -1 } },       //  latest first
+      { $skip: skip },                    // pagination
+      { $limit: limit }
+    ]);
 
-              if (flag) newData.push(obj);
-            }
+    res.status(200).send({
+      status: true,
+      message: "Answers fetched successfully!",
+      currentPage: page,
+      totalPages: Math.ceil(totalRecords / limit),
+      totalRecords,
+      data,
+    });
 
-            //pagination applied here
-            const totalRecords = newData.length;
-            const paginatedData = newData.slice(skip, skip + limit); //startidx,endidx(exclusive)
-
-            res.status(200).send({
-              status: true,
-              message: "Answers fetched successfully!",
-              currentPage: page,
-              totalPages: Math.ceil(totalRecords / limit), //total pages which user will see
-              totalRecords,
-              data: paginatedData,
-            });
-          })
-          .catch(() => {
-            res.status(400).send({
-              status: false,
-              message: "Bad request!",
-            });
-          });
-      })
-      .catch(() => {
-        return res.status(400).send({
-          status: false,
-          message: "User not found!",
-        });
-      });
   } catch (err) {
     res.status(500).send({
       status: false,
@@ -169,6 +146,7 @@ router.get("/:id", async (req, res) => {
     });
   }
 });
+
 
 
 module.exports = router;
