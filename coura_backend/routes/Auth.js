@@ -181,31 +181,6 @@ router.post("/userData", async (req, res) => {
   }
 });
 
-router.get("/:id/userData", async (req, res) => {
-  try {
-    userDB
-      .findOne({ _id: req.params.id })
-      .then((data) => {
-        res.status(200).send({
-          status: true,
-          message: "User details fetched successfully!",
-          data: data,
-        });
-      })
-      .catch(() => {
-        res.status(400).send({
-          status: false,
-          message: "User does not exist!",
-        });
-      });
-  } catch (err) {
-    res.status(500).send({
-      status: false,
-      message: "Error while getting user data!",
-    });
-  }
-});
-
 router.get("/:id/verify/:token", async (req, res) => {
   try {
     const user = await userDB.findOne({ _id: req.params.id });
