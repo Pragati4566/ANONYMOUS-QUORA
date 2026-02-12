@@ -9,7 +9,7 @@ body {
 
 * {
   box-sizing: border-box;/*  padding and border in w ,not jump , to remove default shadow ,
-  css global variables ,forcing,to remove blue colour from the buton when clicked*/
+  css custoom variables ,forcing,to remove blue colour from the buton when clicked*/
   scroll-behavior: smooth; 
 }
 
