@@ -71,7 +71,7 @@ if (!isInstitutionalEmail) {
     const url = `${BASE_URL}/auth/${user._id}/verify/${token.token}`;
     await sendEmail(user.email, "Verify Email", url);
 
-    res.status(400).send({
+    res.status(200).send({
       status: true,
       message:
         "An Email Verification Link has been sent to your account, please verify!",
